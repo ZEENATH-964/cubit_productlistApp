@@ -70,54 +70,59 @@ void initState() {
           }
 
           if (state is ProductLoaded) {
-  return ListView.separated(
-    controller: _controller,
-    padding: const EdgeInsets.all(16),
-    itemCount: state.products.length+1,
-    separatorBuilder: (context, index) => const SizedBox(height: 12),
-    itemBuilder: (context, index) {
-          if (index < state.products.length) {
-  final data = state.products[index];
-       return Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                data.title,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                data.body,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Color.fromARGB(255, 96, 163, 171),
-                  fontWeight: FontWeight.bold,
-                  height: 1.4,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-} else {
-  return const Padding(
-    padding: EdgeInsets.all(16),
-    child: Center(child: CircularProgressIndicator()),
-  );
-}
- 
+  return RefreshIndicator(
+    onRefresh: ()async{
+ context.read<ProductCubit>().refreshProduct();
     },
+    child: ListView.separated(
+      controller: _controller,
+      padding: const EdgeInsets.all(16),
+      itemCount: state.products.length+1,
+      separatorBuilder: (context, index) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+            if (index < state.products.length) {
+    final data = state.products[index];
+         return Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  data.title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  data.body,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Color.fromARGB(255, 96, 163, 171),
+                    fontWeight: FontWeight.bold,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+    } else {
+    return const Padding(
+      padding: EdgeInsets.all(16),
+      child: Center(child: CircularProgressIndicator()),
+    );
+    }
+     
+      },
+    ),
   );
 }
 
